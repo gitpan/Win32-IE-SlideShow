@@ -11,6 +11,7 @@ WriteMakefile(
     'Test::Exception'     => 0,
     'Test::More'          => '0.47',
     'Test::UseAllModules' => '0.09',
+    'Win32::API'          => 0,
     'Win32::OLE'          => 0,
   },
   ($ExtUtils::MakeMaker::VERSION >= 6.31

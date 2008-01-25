@@ -3,26 +3,43 @@ package Win32::IE::SlideShow;
 use strict;
 use warnings;
 use Win32::OLE;
+use Win32::API;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub new {
   my ($class, %options) = @_;
 
   my $invoked;
-  my $appkey = 'InternetExplorer.Application';
-  my $ie = Win32::OLE->GetActiveObject( $appkey );
-  unless ( defined $ie ) {
-    $ie = Win32::OLE->new( $appkey ) or die Win32::OLE->LastError;
+
+  # IE requires special treatment to get an active object.
+  # Simple GetActiveObject('...') doesn't work.
+
+  my $shell = Win32::OLE->new('Shell.Application')
+                or die Win32::OLE->LastError;
+  my $ie;
+  if ( $shell->Windows->Count ) {
+    $ie = $shell->Windows->Item(0);
+  }
+  else {
+    $ie = Win32::OLE->new('InternetExplorer.Application')
+            or die Win32::OLE->LastError;
     $invoked = 1;
   }
 
-  $ie->{Visible} = 0;
+#  $ie->{Visible} = 0;
   my @keys = qw( FullScreen TheaterMode Top Left Height Width );
   foreach my $key ( @keys ) {
     $ie->{$key} = $options{$key} if exists $options{$key};
   }
   $ie->Navigate('about:blank');
+  if ( $options{TopMost} ) {
+    my $wndTopMost = -1;
+    my $SWP_NOMOVE = 2;
+    my $SWP_NOSIZE = 1;
+    my $SetWindowPos = Win32::API->new('user32', 'SetWindowPos', 'NNNNNNN', 'N');
+    $SetWindowPos->Call( $ie->{HWND}, $wndTopMost, 0, 0, 0, 0, $SWP_NOMOVE|$SWP_NOSIZE );
+  }
   $ie->{Visible} = 1;
 
   my $self = bless { ie => $ie, invoked => $invoked }, $class;
@@ -129,6 +146,10 @@ Both can be used to hide other windows but TheaterMode shows some controller.
 =item Top, Left, Height, Width
 
 adjust size/position of IE window.
+
+=item TopMost
+
+If set this to true, IE stays on top.
 
 =back
 

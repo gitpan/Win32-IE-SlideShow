@@ -7,4 +7,5 @@ t/00_load.t
 t/99_pod.t
 t/99_podcoverage.t
 t_live/basic.t
+t_live/invoke.t
 META.yml                                 Module meta-data (added by MakeMaker)
