@@ -1,5 +1,9 @@
 Revision history for Win32-IE-SlideShow
 
+0.03 2008/05/22
+  - added TopMost live tests
+  - added back/page methods
+
 0.02 2008/01/25
   - GetActiveObject doesn't work as expected for IE.
   - added t_live/invoke.t

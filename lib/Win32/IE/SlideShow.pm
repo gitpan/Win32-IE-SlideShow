@@ -5,7 +5,7 @@ use warnings;
 use Win32::OLE;
 use Win32::API;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 sub new {
   my ($class, %options) = @_;
@@ -97,6 +97,20 @@ sub has_next {
   return $self->{index} < $self->{total} ? 1 : 0;
 }
 
+sub back {
+  my $self = shift;
+
+  if ( $self->page > 1 ) {
+    $self->goto( $self->page - 1 );
+  }
+}
+
+sub page {
+  my $self = shift;
+
+  return ( $self->{index} + 1 );
+}
+
 sub quit {
   my $self = shift;
   if ( $self->{ie} && $self->{invoked} ) {
@@ -141,11 +155,11 @@ You can pass several options to fine tune the appearance of IE:
 
 =item FullScreen, TheaterMode
 
-Both can be used to hide other windows but TheaterMode shows some controller.
+Both can be used to hide other windows but TheaterMode shows some controller(s).
 
 =item Top, Left, Height, Width
 
-adjust size/position of IE window.
+adjust size/position of the IE window.
 
 =item TopMost
 
@@ -155,7 +169,7 @@ If set this to true, IE stays on top.
 
 =head2 set
 
-takes an array of complete HTML pages to show, or an array of some formatted texts if you provide some on-the-fly converter with set_callback (see below).
+takes an array of complete HTML pages to show, or an array of formatted texts if you provide an on-the-fly converter with set_callback (see below).
 
 =head2 set_callback
 
@@ -167,15 +181,23 @@ returns the number of slides, which may be used to iterate the slides, or to pro
 
 =head2 start
 
-moves an internal pointer to the first slide, and show it, though you usually don't need to use this.
+moves an internal pointer to the first slide, and shows it, though you usually don't need to use this.
 
 =head2 next
 
-shows the slide which the pointer currently points, and moves the pointer to the next slide and returns a current "page" number, which you may want to pass to the progress indicator, or use as a base to move to another page with goto method.
+shows the slide which the pointer currently points, and moves the pointer to the next slide and returns a current "page" number, which you may want to pass to a progress indicator, or use as a base to move to another page with "goto" method.
 
 =head2 has_next
 
-returns true while the show has slide(s) to show yet.
+returns true while the object has slide(s) to show yet.
+
+=head2 back
+
+shows the previous slide.
+
+=head2 page
+
+returns the current page number (which starts from 1).
 
 =head2 goto
 

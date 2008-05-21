@@ -14,6 +14,11 @@ lives_ok { test( FullScreen => 1 ); };
 lives_ok { test( TheaterMode => 1 ); };
 lives_ok { test( Top => 0, Left => 0 ); };
 lives_ok { test( Height => 200, Width => 500 ); };
+lives_ok { test( TopMost => 1 ); };
+lives_ok { test( TopMost => 1, FullScreen => 1 ); };
+lives_ok { test( TopMost => 1, TheaterMode => 1 ); };
+lives_ok { test( TopMost => 1, Top => 0, Left => 0 ); };
+lives_ok { test( TopMost => 1, Height => 200, Width => 500 ); };
 
 sub test {
   my $show = Win32::IE::SlideShow->new(@_);

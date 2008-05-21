@@ -1,11 +1,11 @@
 --- #YAML:1.0
 name:                Win32-IE-SlideShow
-version:             0.02
+version:             0.03
 abstract:            show and manipulate your slides on IE
 license:             perl
 author:              
     - Kenichi Ishigaki <ishigaki@cpan.org>
-generated_by:        ExtUtils::MakeMaker version 6.42
+generated_by:        ExtUtils::MakeMaker version 6.44
 distribution_type:   module
 requires:     
     Test::Exception:               0
